@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SecondActivity"
+            android:exported="true" />
+
         <service
             android:name=".MyService"
             android:enabled="true"

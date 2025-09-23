@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -15,10 +16,24 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.appcomponents.Constants.KEY_USERNAME
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("key", "info")
+    }
+
+    override fun onRestoreInstanceState(
+        savedInstanceState: Bundle?,
+        persistentState: PersistableBundle?
+    ) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+        savedInstanceState?.getString("key")
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -41,8 +56,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        savedInstanceState?.getString("key")
+
+        //explicit intents
+        val text = "Android Fall 2025"
+        var intent = Intent(this, SecondActivity::class.java)
+        intent.putExtra(KEY_USERNAME, text)
+        startActivity(intent)
+
+        //implicit intents
         val url = "https://www.google.com"
-        var intent = Intent(Intent.ACTION_VIEW, url.toUri())
+        intent = Intent(Intent.ACTION_VIEW, url.toUri())
         startActivity(intent)
 
         intent = Intent(Intent.ACTION_DIAL)
@@ -93,4 +117,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
+
+object Constants {
+    const val KEY_USERNAME = "USERNAME"
 }
